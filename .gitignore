@@ -1,3 +1,10 @@
 .vs
-UserAuthenticationSystem\bin\Debug\net6.0
 /UserAuthenticationSystem/obj
+/UserAuthenticationSystem/bin/Debug/net6.0
+
+# NuGet Packages
+*.nupkg
+# Ignore packages folder
+**/packages/*
+
+
