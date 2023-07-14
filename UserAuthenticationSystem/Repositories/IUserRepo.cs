@@ -2,5 +2,6 @@
 {
     public interface IUserRepo
     {
+        Task<List<string>> GetUserNames();
     }
 }
