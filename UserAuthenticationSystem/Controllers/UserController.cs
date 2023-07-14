@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserAuthenticationSystem.Repositories;
+using UserAuthenticationSystem.Types;
 
 namespace UserAuthenticationSystem.Controllers
 {
@@ -13,10 +15,12 @@ namespace UserAuthenticationSystem.Controllers
         {
             this._userRepo = userRepo;
         }
+        [Authorize]
         [HttpGet]
-        public async Task<List<string>> GetNames()
+        public async Task<IActionResult> GetNames()
         {
-            return await _userRepo.GetUserNames();
-        } 
+            var usernames = await _userRepo.GetUserNames();
+            return !HttpContext.User.Identity.IsAuthenticated ? Unauthorized() : Ok(usernames);
+        }
     }
 }
