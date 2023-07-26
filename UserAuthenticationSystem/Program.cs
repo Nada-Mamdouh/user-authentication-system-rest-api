@@ -19,6 +19,7 @@ namespace UserAuthenticationSystem
             builder.Services.AddDbContext<UserAuthenticationSystemDbContext>(
                 options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerDb")));
 
+            builder.Services.AddScoped<IHashAlgoRepo, HashAlgoRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
 
             builder.Services.AddAuthentication("BasicAuthentication")
