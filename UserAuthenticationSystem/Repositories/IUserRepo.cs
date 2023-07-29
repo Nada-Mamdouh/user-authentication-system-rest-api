@@ -10,6 +10,7 @@ namespace UserAuthenticationSystem.Repositories
         Task<List<string>> GetUserNames();
         Task<UserLoginDatum> GetUserByEmail(string emailaddress);
         Task<bool> UserExists(string emailaddress);
+        List<UserLoginDatum> GetUsers();
 
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserAuthenticationSystem.Repositories;
+using UserAuthenticationSystem.Services;
 using UserAuthenticationSystem.Types;
 using UserAuthenticationSystem.ViewModels;
 
@@ -12,11 +13,14 @@ namespace UserAuthenticationSystem.Controllers
     public class UserController : ControllerBase
     {
         IUserRepo _userRepo;
-        public UserController(IUserRepo userRepo)
+        IJWTTokenServices _jwtTokenServices;
+        public UserController(IUserRepo userRepo, IJWTTokenServices jwtTokenServices)
         {
-            this._userRepo = userRepo;
+            _userRepo = userRepo;
+            _jwtTokenServices = jwtTokenServices;
         }
-        [HttpPost("/Register")]
+        [HttpPost]
+        [Route("Register")]
         public async Task<IActionResult> Register(UserAccountViewModel uavm, [FromQuery]UserLoginDataViewModel uldvm)
         {
             int savingDone = await _userRepo.Register(uldvm, uavm);
@@ -28,6 +32,21 @@ namespace UserAuthenticationSystem.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, savingDone);
             }
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(UserLoginDataViewModel users)
+        {
+            var token = _jwtTokenServices.Authenticate(users);
+
+            if (token == null)
+            {
+                Console.WriteLine("=======================non-authenticated===================");
+                return Ok(new { Message = "Unauthorized" });
+            }
+            Console.WriteLine("=======================authenticated===================");
+            return Ok(token);
         }
         [Authorize]
         [HttpGet("")]
