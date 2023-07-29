@@ -96,5 +96,11 @@ namespace UserAuthenticationSystem.Repositories
             Console.WriteLine("Failed to register and it doesn't already exist!");
             return -1;
         }
+
+        public List<UserLoginDatum> GetUsers()
+        {
+            List<UserLoginDatum> users = _dbContext.UserLoginData.ToList<UserLoginDatum>();
+            return users;
+        }
     }
 }
